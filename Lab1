@@ -1,35 +1,46 @@
-def parse_numbers(text):
-    """Преобразует введенную строку в список чисел."""
-    numbers = []
-    invalid_values = []
+def read_numbers():
+    """
+    Считывает список чисел с клавиатуры.
+    При некорректном вводе запрашивает данные повторно.
+    """
+    while True:
+        user_input = input("Введите числа через пробел: ")
 
-    prepared_text = text.replace(",", " ").replace(";", " ")
+        if user_input.strip() == "":
+            print("Ошибка: список чисел не должен быть пустым.")
+            continue
 
-    for value in prepared_text.split():
-        try:
-            numbers.append(float(value))
-        except ValueError:
-            invalid_values.append(value)
+        numbers_as_strings = user_input.split()
+        numbers = []
 
-    return numbers, invalid_values
+        correct_input = True
+
+        for item in numbers_as_strings:
+            try:
+                number = float(item)
+                numbers.append(number)
+            except ValueError:
+                print("Ошибка: все элементы списка должны быть числами.")
+                correct_input = False
+                break
+
+        if correct_input:
+            return numbers
 
 
 def count_numbers(numbers):
-    """Считает положительные, отрицательные числа и нули."""
-    define_type = lambda number: (
-        "positive" if number > 0 else "negative" if number < 0 else "zero"
-    )
-
+    """
+    Подсчитывает количество положительных,
+    отрицательных и равных нулю чисел.
+    """
     positive_count = 0
     negative_count = 0
     zero_count = 0
 
     for number in numbers:
-        number_type = define_type(number)
-
-        if number_type == "positive":
+        if number > 0:
             positive_count += 1
-        elif number_type == "negative":
+        elif number < 0:
             negative_count += 1
         else:
             zero_count += 1
@@ -38,38 +49,21 @@ def count_numbers(numbers):
 
 
 def main():
-    print("Лабораторная работа №1")
-    print("Вариант 29")
-    print("Задание: подсчитать количество положительных чисел,")
-    print("отрицательных чисел и чисел, равных нулю.")
-    print()
+    """
+    Основная функция программы.
+    """
+    print("Программа подсчитывает количество положительных,")
+    print("отрицательных и равных нулю чисел в списке.")
 
-    user_input = input(
-        "Введите список чисел через пробел, запятую или точку с запятой: "
-    )
-
-    numbers, invalid_values = parse_numbers(user_input)
-
-    if not numbers:
-        print("Корректные числа не найдены.")
-        return
+    numbers = read_numbers()
 
     positive_count, negative_count, zero_count = count_numbers(numbers)
 
-    print()
-    print("Введенный список чисел:")
-    print(numbers)
-    print()
-    print("Результат:")
-    print(f"Количество положительных чисел: {positive_count}")
-    print(f"Количество отрицательных чисел: {negative_count}")
-    print(f"Количество чисел, равных нулю: {zero_count}")
-
-    if invalid_values:
-        print()
-        print("Следующие значения не были обработаны как числа:")
-        print(invalid_values)
+    print("\nРезультат:")
+    print("Введенный список чисел:", numbers)
+    print("Количество положительных чисел:", positive_count)
+    print("Количество отрицательных чисел:", negative_count)
+    print("Количество чисел, равных нулю:", zero_count)
 
 
-if __name__ == "__main__":
-    main()
+main()
